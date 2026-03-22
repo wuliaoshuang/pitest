@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PI Test</title>
+    <style>
+      @font-face {
+        font-family: "Ephesis";
+        src: url("/fonts/Ephesis-Regular.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      :root {
+        color: #0f172a;
+        background: #ffffff;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue",
+          "Geist Variable", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        background: #ffffff;
+      }
+
+      body {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 32px;
+      }
+
+      main {
+        width: min(100%, 640px);
+      }
+
+      .shell {
+        display: grid;
+        gap: 16px;
+      }
+
+      .brand-script {
+        margin: 0;
+        font-family: "Ephesis", cursive;
+        font-size: clamp(30px, 4vw, 42px);
+        line-height: 1;
+        text-align: center;
+        color: #5ac8fa;
+      }
+
+      .brand-title {
+        margin: 0;
+        font-family: "Ephesis", cursive;
+        font-size: clamp(74px, 12vw, 126px);
+        line-height: 0.84;
+        letter-spacing: 0;
+        text-align: center;
+        color: #0a84ff;
+      }
+
+      #title {
+        margin: 4px 0 0;
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        text-align: center;
+        color: #1d4ed8;
+      }
+
+      #detail {
+        margin: 0;
+        text-align: center;
+        color: #64748b;
+        font-size: 13px;
+        line-height: 1.8;
+      }
+
+      .progress-wrap {
+        display: grid;
+        gap: 10px;
+        margin-top: 4px;
+      }
+
+      .meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        color: #64748b;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .track {
+        height: 6px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(10, 132, 255, 0.1);
+      }
+
+      .bar {
+        height: 100%;
+        width: 18%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #0a84ff 0%, #5ac8fa 100%);
+        box-shadow: 0 0 0 1px rgba(10, 132, 255, 0.04);
+        transition: width 220ms ease-out;
+      }
+
+      .actions {
+        display: none;
+        justify-content: center;
+        margin-top: 8px;
+      }
+
+      .actions.is-visible {
+        display: flex;
+      }
+
+      button {
+        appearance: none;
+        border: 0;
+        border-radius: 999px;
+        background: #0a84ff;
+        color: #ffffff;
+        padding: 11px 18px;
+        font: inherit;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+        cursor: pointer;
+      }
+
+      button:disabled {
+        opacity: 0.5;
+        cursor: default;
+      }
+
+      body[data-phase="error"] #title {
+        color: #c2410c;
+      }
+
+      body[data-phase="error"] .track {
+        background: rgba(245, 158, 11, 0.12);
+      }
+
+      body[data-phase="error"] .bar {
+        background: linear-gradient(90deg, #f59e0b 0%, #fb923c 100%);
+      }
+
+      @media (max-width: 640px) {
+        body {
+          padding: 24px;
+        }
+
+        .meta {
+          font-size: 10px;
+        }
+      }
+    </style>
+  </head>
+
+  <body data-phase="booting">
+    <main>
+      <div class="shell">
+        <p class="brand-script">workspace</p>
+        <h1 class="brand-title">PI Test</h1>
+        <p id="title">同步工作区</p>
+        <p id="detail">正在准备本地代理环境。首次启动会自动解压内置 runtime，所以会比后续启动慢一点。</p>
+
+        <div class="progress-wrap">
+          <div class="meta">
+            <span id="phase">同步中</span>
+            <span id="percent">--%</span>
+          </div>
+          <div class="track">
+            <div class="bar" id="progress-bar"></div>
+          </div>
+        </div>
+
+        <div class="actions" id="actions">
+          <button id="retry-button" type="button">重新尝试</button>
+        </div>
+      </div>
+    </main>
+
+    <script type="module" src="/src/splashscreen.ts"></script>
+  </body>
+</html>
