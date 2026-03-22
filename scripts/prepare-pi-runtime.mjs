@@ -20,7 +20,9 @@ const bundlesDir = join(resourceRoot, "pi-bundles");
 const legacyRuntimeDir = join(resourceRoot, "pi-runtime");
 const packageJsonPath = join(projectRoot, "package.json");
 const sessionBackfillScriptPath = join(scriptDir, "backfill-pi-session.mjs");
+const npmExecutableName = process.platform === "win32" ? "npm.cmd" : "npm";
 const nodeExecutableName = process.platform === "win32" ? "node.exe" : "node";
+const tarExecutableName = process.platform === "win32" ? "tar.exe" : "tar";
 
 const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8"));
 const piVersionRange = packageJson.dependencies?.["@mariozechner/pi-coding-agent"];
@@ -56,7 +58,7 @@ writeFileSync(
   ),
 );
 
-execFileSync("npm", ["install", "--omit=dev", "--ignore-scripts"], {
+execFileSync(npmExecutableName, ["install", "--omit=dev", "--ignore-scripts"], {
   cwd: piRuntimeStage,
   stdio: "inherit",
 });
@@ -121,7 +123,7 @@ copyFileSync(sessionBackfillScriptPath, join(bundlesDir, "backfill-pi-session.mj
 rmSync(stageRoot, { recursive: true, force: true });
 
 function archiveDirectory(parentDir, dirName, outputPath) {
-  execFileSync("tar", ["-czf", outputPath, "-C", parentDir, dirName], {
+  execFileSync(tarExecutableName, ["-czf", outputPath, "-C", parentDir, dirName], {
     stdio: "inherit",
   });
 }
